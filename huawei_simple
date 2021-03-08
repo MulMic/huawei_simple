@@ -1,0 +1,129 @@
+#!/bin/bash
+# huawei_simple mulmic 20210308
+# based on information from:
+# https://pypi.org/project/huawei-lte-api/
+# https://github.com/siphomateke/huawei-router-api
+# https://github.com/jinxo13/HuaweiB525Router
+# https://www.mrt-prodz.com/blog/view/2015/05/huawei-modem-api-and-data-plan-monitor
+# https://github.com/if0xx/Huawei-Hilink-API
+# https://www.lteforum.at/mobilfunk/toolbox-fuer-huawei-router-mit-hilink.1872/seite-5.html
+clear
+DEBUG=0
+
+# curl options -s = silent, -v = verbose
+
+[ $DEBUG -eq 1 ] && copt="-v" || copt="-s"
+
+phone=${1:-"<yourphonehere>"}
+message=$(date +%Y%m%d%H%M%S)${2:-"greetings from $phone"}
+
+# put the variables below into file ~/.huawei_simple for convenience
+
+user=""
+pass=""
+ip=""
+scheme="http://"
+baseurl=$scheme$ip
+
+. ~/.huawei_simple
+
+# just a reference, the real xml-strings must remain where they are because
+# variables used are generated there.
+
+#login_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Username>$user</Username><Password>$passct</Password><password_type>4</password_type></request>"
+#logout_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Logout>1</Logout></request>"
+#send_sms_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Index>-1</Index><Phones><Phone>$phone</Phone></Phones><Sca></Sca><Content>$message</Content><Length>${#message}</Length><Reserved>1</Reserved><Date>-1</Date></request>"
+
+# encrypt string $1
+
+crypt(){
+printf "$(printf "$1" | sha256sum | cut -d ' ' -f 1)" | base64 -w 0
+}
+
+# extract $2 from xml-string $1
+
+fromxml(){
+echo "$1" | sed -n "s/.*<$2>\\([^<]\\+\\)<.*$/\\1/p"
+}
+
+# send request to router api, if $2 unset get, post otherwise
+
+request(){
+if [ -z "$2" ]; then
+  response=$(curl $copt -b cookie.$$ -c cookie.$$ "$baseurl/$1" | head)
+else
+  response=$(curl $copt -b cookie.$$ -c cookie.$$ "$baseurl/$1" \
+  -H "__RequestVerificationToken:$TOKEN2" \
+  --data "$2" | head)
+fi
+
+if [ $DEBUG -eq 1 ]; then
+  echo -e "\nfrom $baseurl/$1 request: \n$response\n"
+  echo -e "\ncookie: \n$(cat cookie.$$)\n"
+  echo -e "\ntoken: \n$TOKEN2\n"
+fi
+}
+
+# get session token & cookie (cookies are managed by curl -b -c) 
+
+gettoken(){
+request "" ""
+TOKEN1=$(echo $response | cut -d ">" -f 4 | cut -d '"' -f 4)
+TOKEN2=$(echo $response | cut -d ">" -f 5 | cut -d '"' -f 4)
+}
+
+# post login request
+
+login(){
+gettoken
+passct=$(crypt "$user$(crypt "$pass")$TOKEN2")
+login_xml='<?xml version="1.0" encoding="UTF-8"?><request><Username>'$user'</Username><Password>'$passct'</Password><password_type>4</password_type></request>'
+request "api/user/login" "$login_xml"
+}
+
+#post send-sms request
+
+send_sms(){
+gettoken
+send_sms_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Index>-1</Index><Phones><Phone>$phone</Phone></Phones><Sca></Sca><Content>$message</Content><Length>${#message}</Length><Reserved>1</Reserved><Date>1</Date></request>"
+request "api/sms/send-sms" "$send_sms_xml"
+}
+
+# post logout request (logout need be, as session will else last for 5 minutes)
+
+logout(){
+gettoken
+logout_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Logout>1</Logout></request>"
+request "api/user/logout" "$logout_xml"
+}
+
+# get login-state (not really necessary, checks if  user is logged out for good)
+
+state_login(){
+request "api/user/state-login"
+if [ -z "$(fromxml "$response" username)" ]; then
+  echo -e "\ntask completed, no user logged in\n"
+else
+  echo -e "\nuser $(fromxml "$response" username) logged in\n"
+fi
+}
+
+login
+send_sms
+logout
+state_login
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,373 @@
+# Huawei B818-263 LTE Router api endpoints
+#see also https://bLog.hqcodeshop.fi/archives/259-Huawei-E5186-AJAX-API.htmL
+#see also https://github.com/cmaion/huawei_router
+#see also https://github.com/theReaLAJR/LTE-Router-Huawei-8618s-22d
+#see also /js/guide.js, /js/emui-jquery.js, /js/redirect.js, /js/public.js, /js/index.js
+
+#var AJAX_TIMEOUT = 30000;
+#var ERROR	= 100005
+#var ERROR	= 100006
+#var ERROR_SYSTEM_BUSY = 100004;
+#var ERROR_SYSTEM_NO_RIGHTS = 100003;
+#var ERROR_SYSTEM_NO_SUPPORT = 100002;
+#var ERROR_VOICE_BUSY = '120001';
+#var ERROR_WRONG_SESSION = 125002;
+#var ERROR_WRONG_SESSION_TOKEN = 125003;
+#var ERROR_WRONG_TOKEN = 125001;
+
+#sms box-types
+#INBOX: 1,
+#SENT: 2,
+#DRAFT: 3,
+#TRASH: 4,
+#SIM_INBOX: 5,
+#SIM_SENT: 6,
+#SIM_DRAFT: 7,
+#MIX_INBOX: 8,
+#MIX_SENT: 9,
+#MIX_DRAFT: 10,
+
+
+# nonfunctional api endpoints may work with other devices
+
+#/api/config_device_information/config			# nonfunctional, request=100003,	login_request=100003
+#/api/config_dialup/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_dialup/connectmode				# nonfunctional, request=100003,	login_request=100003
+#/api/config_dialup/lmt_auto_mode_disconnect		# nonfunctional, request=100003,	login_request=100003
+#/api/config_dialup/profileswitch			# nonfunctional, request=100003,	login_request=100003
+#/api/config_fast_boot/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_firewall/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_global/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_global/languagelist			# nonfunctional, request=100003,	login_request=100003
+#/api/config_global/net_type				# nonfunctional, request=100003,	login_request=100003
+#/api/config_ipv6/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_lan/config					# nonfunctional, request=100003,	login_request=100003
+#/api/config_network/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_network/net_mode				# nonfunctional, request=100003,	login_request=100003
+#/api/config_network/networkband_null			# nonfunctional, request=100003,	login_request=100003
+#/api/config_network/networkmode			# nonfunctional, request=100003,	login_request=100003
+#/api/config_ota/config					# nonfunctional, request=100003,	login_request=100003
+#/api/config_pb/config					# nonfunctional, request=100003,	login_request=100003
+#/api/config_pc_assistant/config			# nonfunctional, request=100003,	login_request=100003
+#/api/config_pc_assistant/updateautorun			# nonfunctional, request=100003,	login_request=100003
+#/api/config_pincode/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_sms/config					# nonfunctional, request=100003,	login_request=100003
+#/api/config_sntp/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_statistic/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_stk/config					# nonfunctional, request=100003,	login_request=100003
+#/api/config_u_pnp/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_update/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_ussd/postpaidussd				# nonfunctional, request=100003,	login_request=100003
+#/api/config_ussd/prepaidussd				# nonfunctional, request=100003,	login_request=100003
+#/api/config_voice/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_web_sd/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_web_ui_cfg/config				# nonfunctional, request=100003,	login_request=100003
+#/api/config_wifi/channel_auto_match_hardware		# nonfunctional, request=100003,	login_request=100003
+#/api/config_wifi/configure				# nonfunctional, request=100003,	login_request=100003
+#/api/config_wifi/country_channel			# nonfunctional, request=100003,	login_request=100003
+#/api/cradle/basic_info					# nonfunctional, request=100003,	login_request=100003
+#/api/cradle/factory_mac				# nonfunctional, request=100003,	login_request=100003
+#/api/cradle/feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/cradle/mac_info					# nonfunctional, request=100003,	login_request=100003
+#/api/cradle/status_info				# nonfunctional, request=100003,	login_request=100003
+#/api/cwmp/basic_info					# nonfunctional, request=100003,	login_request=100003
+#/api/d_dns/get_ddns_list				# nonfunctional, request=100003,	login_request=100003
+#/api/d_dns/get_status					# nonfunctional, request=100003,	login_request=100003
+#/api/device/antenna_status				# nonfunctional, request=100003,	login_request=100003
+#/api/device/autorun_version				# nonfunctional, request=100003,	login_request=100003
+#/api/device/basicinformation				# nonfunctional, request=100003,	login_request=100003
+#/api/device/device_feature_switch			# nonfunctional, request=100003,	login_request=100003
+#/api/config/help/config/xml				# nonfunctional, request=100003,	login_request=100003
+#/api/device/logsetting					# nonfunctional, request=100003,	login_request=100003
+#/api/device/usb_tethering_switch			# nonfunctional, request=100003,	login_request=100003
+#/api/dhcp/dhcp_host_info				# nonfunctional, request=100003,	login_request=100003
+#/api/dhcp/feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/dhcp/static_addr_info				# nonfunctional, request=100003,	login_request=100003
+#/api/diagnosis/ping					# nonfunctional, request=100003,	login_request=100003
+#/api/diagnosis/trace_route_result			# nonfunctional, request=100003,	login_request=100003
+#/api/dial_up/auto_apn					# nonfunctional, request=100003,	login_request=100003
+#/api/dial_up/connection				# nonfunctional, request=100003,	login_request=100003
+#/api/dial_up/dialup_feature_switch			# nonfunctional, request=100003,	login_request=100003
+#/api/dial_up/mobile_dataswitch				# nonfunctional, request=100003,	login_request=100003
+#/api/dial_up/profiles					# nonfunctional, request=100003,	login_request=100003
+#/api/global_/module_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/lan/host_info					# nonfunctional, request=100003,	login_request=100003
+#/api/language/current_language				# nonfunctional, request=100003,	login_request=100003
+#/api/led/nightmode					# nonfunctional, request=100003,	login_request=100003
+#/api/mlog/mobile_logger				# nonfunctional, request=100003,	login_request=100003
+#/api/monitoring/check_notifications			# nonfunctional, request=100003,	login_request=100003
+#/api/monitoring/converged_status			# nonfunctional, request=100003,	login_request=100003
+#/api/monitoring/traffic_statistics			# nonfunctional, request=100003,	login_request=100003
+#/api/monitoring/wifi_month_setting			# nonfunctional, request=100003,	login_request=100003
+#/api/net/cell_info					# nonfunctional, request=100003,	login_request=100003
+#/api/net/current_plmn					# nonfunctional, request=100003,	login_request=100003
+#/api/net/net_feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/net/net_mode					# nonfunctional, request=100003,	login_request=100003
+#/api/net/net_mode_list					# nonfunctional, request=100003,	login_request=100003
+#/api/net/net-mode					# nonfunctional, request=100003,	login_request=100003
+#/api/net/network					# nonfunctional, request=100003,	login_request=100003
+#/api/net/plmn_list					# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/ack_newversion			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/autoupdate_config			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/cancel_downloading			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/check_new_version			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/configuration			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/redirect_cancel			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/status				# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/upgrade_messagebox			# nonfunctional, request=100003,	login_request=100003
+#/api/online_update/url_list				# nonfunctional, request=100003,	login_request=100003
+#/api/online-update/ack-newversion			# nonfunctional, request=100003,	login_request=100003
+#/api/ota/status					# nonfunctional, request=100003,	login_request=100003
+#/api/pb/get_pb_list					# nonfunctional, request=100003,	login_request=100003
+#/api/pb/group_count					# nonfunctional, request=100003,	login_request=100003
+#/api/pb/pb_count					# nonfunctional, request=100003,	login_request=100003
+#/api/pin/save_pin					# nonfunctional, request=100003,	login_request=100003
+#/api/s_ntp/get_settings				# nonfunctional, request=100003,	login_request=100003
+#/api/s_ntp/serverinfo					# nonfunctional, request=100003,	login_request=100003
+#/api/s_ntp/sntpswitch					# nonfunctional, request=100003,	login_request=100003
+#/api/s_ntp/timeinfo					# nonfunctional, request=100003,	login_request=100003
+#/api/sd_card/dlna_setting				# nonfunctional, request=100003,	login_request=100003
+#/api/sd_card/printerlist				# nonfunctional, request=100003,	login_request=100003
+#/api/sd_card/sdcard					# nonfunctional, request=100003,	login_request=100003
+#/api/sd_card/sdcardsamba				# nonfunctional, request=100003,	login_request=100003
+#/api/sd_card/share_account				# nonfunctional, request=100003,	login_request=100003
+#/api/security/acls					# nonfunctional, request=100003,	login_request=100003
+#/api/security/feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/security/get_firewall_switch			# nonfunctional, request=100003,	login_request=100003
+#/api/security/lan_ip_filter				# nonfunctional, request=100003,	login_request=100003
+#/api/security/mac_filter				# nonfunctional, request=100003,	login_request=100003
+#/api/security/special_applications			# nonfunctional, request=100003,	login_request=100003
+#/api/security/url_filter				# nonfunctional, request=100003,	login_request=100003
+#/api/security/virtual_servers				# nonfunctional, request=100003,	login_request=100003
+#/api/security/white_lan_ip_filter			# nonfunctional, request=100003,	login_request=100003
+#/api/security/white_url_filter				# nonfunctional, request=100003,	login_request=100003
+#/api/sms/backup-sim
+#/api/sms/cancel-send
+#/api/sms/get_cbsnewslist				# nonfunctional, request=100003,	login_request=100003
+#/api/sms/get_sms_list					# nonfunctional, request=100003,	login_request=100003
+#/api/sms/get_sms_list_pdu				# nonfunctional, request=100003,	login_request=100003
+#/api/sms/get-sms-list-pdu				# nonfunctional, request=100003,	login_request=100003
+#/api/sms/save-sms
+#/api/sms/send_status					# nonfunctional, request=100003,	login_request=100003
+#/api/sms/set-read
+#/api/sms/sms_count					# nonfunctional, request=100003,	login_request=100003
+#/api/sms/sms_count_contact				# nonfunctional, request=100003,	login_request=100003
+#/api/statistic/feature_roam_statistic			# nonfunctional, request=100003,	login_request=100003
+#/api/syslog/querylog					# nonfunctional, request=100003,	login_request=100003
+#/api/system/ioc_device_capacity/json			# nonfunctional, request=100003,	login_request=100003
+#/api/usb_printer/printerlist				# nonfunctional, request=100003,	login_request=100003
+#/api/usb_storage/fsstatus				# nonfunctional, request=100003,	login_request=100003
+#/api/usb_storage/usbaccount				# nonfunctional, request=100003,	login_request=100003
+#/api/usbstorage/usbaccount				# nonfunctional, request=100003,	login_request=100003
+#/api/user/history_login				# nonfunctional, request=100003,	login_request=100003
+#/api/user/state_login					# nonfunctional, request=100003,	login_request=100003
+#/api/user/web_feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/usermanual_public_sys_resources/config		# nonfunctional, request=100003,	login_request=100003
+#/api/v_sim/operateswitch_vsim				# nonfunctional, request=100003,	login_request=100003
+#/api/voice/codec					# nonfunctional, request=100003,	login_request=100003
+#/api/vpn/12tp_settings					# nonfunctional, request=100003,	login_request=100003
+#/api/vpn/feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/vpn/status					# nonfunctional, request=100003,	login_request=100003
+#/api/webserver/white_list_switch			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/basic_settings				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/handover_setting				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/host_list					# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/mac_filter					# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_basic_settings				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_macfilter_settings			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_macfilter_settings_ex			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_security_settings			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_security_settings_ex			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/multi_switch_settings			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/oled_showpassword				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/security_settings				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/station_information				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/status_switch_settings			# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/wifi_feature_switch				# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/wifisync					# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/wps_appin					# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/wps_pbc					# nonfunctional, request=100003,	login_request=100003
+#/api/wlan/wps_switch					# nonfunctional, request=100003,	login_request=100003
+
+/api/app/operatorinfo					# request=data,		login_request=data
+/api/app/operatorinfo?lang=de_de			# request=data,		login_request=data
+/api/app/privacypolicy					# request=data,		login_request=data
+/api/app/privacypolicy?lang=de_de       		# request=data,		login_request=data, replace de_de with country code
+/api/bluetooth/scan					# request=100002,	login_request=100002
+/api/bluetooth/settings					# request=100003,	login_request=data
+/api/config_device/config				# request=100003,	login_request=100003
+/api/cradle/basic-info					# request=100003,	login_request=data
+/api/cradle/current-mac					# request=100003,	login_request=100002				
+/api/cradle/factory-mac					# request=100003,	login_request=data
+/api/cradle/feature-switch				# request=100003,	login_request=data
+/api/cradle/mac-info					# request=100003,	login_request=data
+/api/cradle/status-info					# request=data,		login_request=data
+/api/cwmp/basic-info					# request=100003,	login_request=100002
+/api/ddns/ddns-list					# request=100003,	login_request=data
+/api/ddns/status					# request=100003,	login_request=data
+/api/device/antenna_type				# request=100003,	login_request=data
+/api/device/autorun-version				# request=103005,	login_request=103005
+/api/device/basic_information				# request=data,		login_request=data
+/api/device/boot_time					# request=100003,	login_request=data
+/api/device/control					# request=100003,	login_request=100002
+/api/device/device-feature-switch			# request=data,		login_request=data
+/api/device/encryp_imsi_imei				# request=100003,	login_request=data
+/api/device/information					# request=100003,	login_request=data
+/api/device/signal					# request=100003,	login_request=data
+/api/device/usb-tethering-switch			# request=data,		login_request=data
+/api/dhcp/feature-switch				# request=100003,	login_request=data
+/api/dhcp/settings					# request=100003,	login_request=data
+/api/dhcp/static-addr-info				# request=100003,	login_request=data
+/api/diagnosis/diagnose_ping				# request=100003,	login_request=data
+/api/diagnosis/diagnose_traceroute			# request=100003,	login_request=data
+/api/diagnosis/time_reboot				# request=data,		login_request=data
+/api/diagnosis/traceroute				# request=100003,	login_request=100002
+/api/diagnosis/tracerouteresult				# request=100003,	login_request=100002
+/api/diagnosis/user_behavior				# request=100006,	login_request=100006
+/api/dialup/connection					# request=data,		login_request=data
+/api/dialup/dial					# request=100003,	login_request=data (waiting)
+/api/dialup/dialup-feature-switch			# request=data,		login_request=data
+/api/dialup/mobile-dataswitch				# request=data,		login_request=data
+/api/dialup/profiles					# request=100003,	login_request=data
+/api/global/module-switch				# request=data,		login_request=data
+/api/host/info						# request=100005,	login_request=100005
+/api/lan/switch-ipmode					# request=100003,	login_request=data
+/api/language/current-language				# request=data,		login_request=data
+/api/log/loginfo					# request=100003,	login_request=data
+/api/monitoring/check-notifications			# request=data,		login_request=data
+/api/monitoring/converged-status			# request=data,		login_request=data
+/api/monitoring/daily-data-limit			# request=100002,	login_request=100002
+/api/monitoring/month_statistics			# request=data,		login_request=data
+/api/monitoring/month_statistics_wlan			# request=100003,	login_request=data
+/api/monitoring/onekey_diag				# request=data,		login_request=data
+/api/monitoring/start_date				# request=data,		login_request=data
+/api/monitoring/start_date_wlan				# request=100003,	login_request=data
+/api/monitoring/statistic-feature-switch		# request=data,		login_request=data
+/api/monitoring/status					# request=data,		login_request=data
+/api/monitoring/traffic-statistics			# request=data,		login_request=data
+/api/net/cell-info					# request=100003,	login_request=data
+/api/net/csps_state					# request=100003,	login_request=data
+/api/net/current-plmn					# request=data,		login_request=data
+/api/net/net-feature-switch				# request=data,		login_request=data
+/api/net/net-mode-list					# request=100003,	login_request=data
+/api/net/plmn-list					# request=100003,	login_request=data
+/api/net/register					# request=100003,	login_request=data
+/api/ntwk/celllock					# request=100002,	login_request=100002
+/api/ntwk/dualwaninfo					# request=100002,	login_request=100002
+/api/ntwk/lan_upnp_portmapping				# request=100003,	login_request=data
+/api/online-update/autoupdate-config			# request=data,		login_request=data
+/api/online-update/cancel-downloading			# request=100002,	login_request=100002
+/api/online-update/check-new-version			# request=100002,	login_request=100002
+/api/online-update/configuration			# request=data,		login_request=data
+/api/online-update/redirect_cancel			# request=100002,	login_request=100002
+/api/online-update/status				# request=data,		login_request=data
+/api/online-update/url-list				# request=100001,	login_request=100001
+/api/pb/group-count					# request=100003,	login_request=100002					
+/api/pb/pb-count					# request=100003,	login_request=100002
+/api/pb/pb-list						# request=100003,	login_request=100002
+/api/pin/save-pin					# request=100003,	login_request=data
+/api/pin/simlock					# request=data,		login_request=data
+/api/pin/status						# request=data,		login_request=data
+/api/redirection/homepage				# request=data,		login_request=data				
+/api/sdcard/dlna-setting				# request=100003,	login_request=100002
+/api/sdcard/printerlist					# request=100003,	login_request=100002
+/api/sdcard/sdcard					# request=100002,	login_request=100002
+/api/sdcard/sdcardsamba					# request=100003,	login_request=100002
+/api/security/bridgemode				# request=100003,	login_request=data
+/api/security/dmz					# request=100003,	login_request=data
+/api/security/feature-switch				# request=100003,	login_request=data
+/api/security/firewall-switch				# request=100003,	login_request=data
+/api/security/lan-ip-filter				# request=100003,	login_request=data
+/api/security/mac-filter				# request=100003,	login_request=data
+/api/security/nat					# request=100003,	login_request=data
+/api/security/sip					# request=100003,	login_request=data
+/api/security/special-applications			# request=100003,	login_request=data
+/api/security/upnp					# request=100003,	login_request=data
+/api/security/url-filter				# request=100003,	login_request=data
+/api/security/virtual-servers				# request=100003,	login_request=data
+/api/security/white-lan-ip-filter			# request=100003,	login_request=data
+/api/security/white-url-filter				# request=100003,	login_request=data
+/api/sms/config						# request=100003,	login_request=data
+/api/sms/get-cbsnewslist				# request=100003,	login_request=100002
+/api/sms/send-status					# request=100003,	login_request=data
+/api/sms/sms-count					# request=data,		login_request=data
+/api/sms/sms-count-contact				# request=100003,	login_request=data
+/api/sms/sms-list					# request=100003,	login_request=100005
+/api/sntp/serverinfo					# request=100003,	login_request=data
+/api/sntp/sntpswitch					# request=100003,	login_request=data
+/api/sntp/timeinfo					# request=100003,	login_request=data
+/api/staticroute/wanpath				# request=data,		login_request=data
+/api/statistic/feature-roam-statistic			# request=100002,	login_request=100002
+/api/system/devcapacity					# request=data,		login_request=data
+/api/system/deviceinfo					# request=data,		login_request=data				
+/api/system/onlinestate?devid=all			# request=data (no detail),	login_request=data (detail)
+/api/system/onlineupg					# request=100003,	login_request=100002
+/api/time/timeout					# request=data,		login_request=data
+/api/timerule/timerule					# request=100003,	login_request=data
+/api/usbprinter/printerlist				# request=100003,	login_request=100002
+/api/usbstorage/fsstatus				# request=100003,	login_request=100002
+/api/user/authentication_login				# request=100003,	login_request=100002
+/api/user/challenge_login				# request=100003,	login_request=100002
+/api/user/guide-checkpassword				# request=100003,	login_request=100002
+/api/user/heartbeat					# request=data,		login_request=data
+/api/user/hilink_login					# request=data,		login_request=data
+/api/user/history-login					# request=100003,	login_request=data
+/api/user/login						# request=100003,	login_request=100002
+/api/user/logout					# request=100003,	login_request=100002
+/api/user/password					# request=100003,	login_request=100002
+/api/user/password_scram				# request=100003,	login_request=100002
+/api/user/pwd						# request=100003,	login_request=100002
+/api/user/remember-pwd					# request=100006,	login_request=100006
+/api/user/remind					# request=data,		login_request=data
+/api/user/screen_state					# request=100003,	login_request=100002
+/api/user/session					# request=100003,	login_request=100002
+/api/user/state-login					# request=data,		login_request=data
+/api/user/web-feature-switch				# request=data,		login_request=data
+/api/ussd/get						# request=100003,	login_request=100002
+/api/voice/featureswitch				# request=100003,	login_request=data
+/api/voice/functioncode					# request=100003,	login_request=data
+/api/voice/sipaccount					# request=100003,	login_request=data
+/api/voice/sipadvance					# request=100003,	login_request=data
+/api/voice/sipserver					# request=100003,	login_request=data
+/api/voice/speeddial					# request=100003,	login_request=data
+/api/voice/voiceadvance					# request=100003,	login_request=data
+/api/voice/voicebusy					# request=100003,	login_request=data
+/api/voice/voiperstatus					# request=100003,	login_request=data
+/api/vpn/br_list					# request=100003,	login_request=data
+/api/vpn/feature-switch					# request=100003,	login_request=data
+/api/vpn/ipsec_settings					# request=100003,	login_request=100002
+/api/vpn/l2tp_settings					# request=100003,	login_request=data
+/api/vpn/pptp_settings					# request=100003,	login_request=data
+/api/webserver/publickey				# request=data,		login_request=data
+/api/webserver/SesTokInfo				# request=data,		login_request=data
+/api/webserver/token					# request=data,		login_request=data
+/api/wlan/basic-settings				# request=100003,	login_request=data
+/api/wlan/handover-setting				# request=100002,	login_request=100002
+/api/wlan/host-list					# request=100003,	login_request=data
+/api/wlan/mac-filter					# request=100003,	login_request=100002
+/api/wlan/multi-basic-settings				# request=100003,	login_request=data
+/api/wlan/multi-macfilter-settings			# request=100003,	login_request=data
+/api/wlan/multi-macfilter-settings-ex			# request=100003,	login_request=data
+/api/wlan/multi-security-settings			# request=100003,	login_request=data
+/api/wlan/multi-security-settings-ex			# request=100003,	login_request=data
+/api/wlan/multi-switch-settings				# request=100003,	login_request=data
+/api/wlan/security-settings				# request=100003,	login_request=100002
+/api/wlan/station-information				# request=100003,	login_request=100002
+/api/wlan/status-switch-settings			# request=100003,	login_request=100002
+/api/wlan/wifi-feature-switch				# request=data,		login_request=data
+/api/wlan/wififrequence					# request=100003,	login_request=100002
+/api/wlan/wifiprofile					# request=100003,	login_request=100002
+/api/wlan/wifiscanresult				# request=100003,	login_request=100002
+/api/wlan/wlandbho					# request=100003,	login_request=data
+/api/wlan/wlan-guide-settings				# request=100003,	login_request=data
+/api/wlan/wlanintelligent				# request=100003,	login_request=data
+/api/wlan/wps						# request=100003,	login_request=data
+/api/wlan/wps-appin					# request=100003,	login_request=data
+/api/wlan/wps-pbc					# request=data,		login_request=data
+/api/wlan/wps-switch					# request=100003,	login_request=data
+/config/deviceinformation/config.xml			# http://<ip-address>
+/config/gLobaL/config.xml				# http://<ip-address>
+/config/gLobaL/LanguageList.xml				# http://<ip-address>
+/config/gLobaL/net-type.xml				# http://<ip-address>
+/config/pcassistant/config.xml				# http://<ip-address>
+/config/webuicfg/config.xml				# http://<ip-address>
