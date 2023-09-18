@@ -1,38 +1,125 @@
 #!/bin/bash
-# huawei_simple mulmic 20210308
-# based on information from:
-# https://pypi.org/project/huawei-lte-api/
-# https://github.com/siphomateke/huawei-router-api
-# https://github.com/jinxo13/HuaweiB525Router
-# https://www.mrt-prodz.com/blog/view/2015/05/huawei-modem-api-and-data-plan-monitor
-# https://github.com/if0xx/Huawei-Hilink-API
-# https://www.lteforum.at/mobilfunk/toolbox-fuer-huawei-router-mit-hilink.1872/seite-5.html
-clear
 DEBUG=0
 
-# curl options -s = silent, -v = verbose
+<< COMMENT
+huawei_simple v 0.1.1-alpha; GPLv3 
+https://www.gnu.org/licenses/quick-guide-gplv3.en.html
+mulmic 20210308, 20210309, 20210311, 20210319, 20210320
 
-[ $DEBUG -eq 1 ] && copt="-v" || copt="-s"
+based on information from:
 
-phone=${1:-"<yourphonehere>"}
-message=$(date +%Y%m%d%H%M%S)${2:-"greetings from $phone"}
+login:
+https://github.com/theRealAJR/LTE-Router-Huawei-B618s-22d (bash)
+https://github.com/cmaion/huawei_router (bash)
 
-# put the variables below into file ~/.huawei_simple for convenience
+scram login:
+https://xn--n-soa.lt/wiki/Huawei_B525_4G_router (python)
+https://gist.github.com/magicdude4eva/5a8d14fe7c08262408e0356953a617cb (php)
 
-user=""
-pass=""
-ip=""
+general information:
+https://pypi.org/project/huawei-lte-api/
+https://github.com/siphomateke/huawei-router-api
+http://www.bez-kabli.pl/viewtopic.php?t=42168
+https://blog.hqcodeshop.fi/archives/259-Huawei-E5186-AJAX-API.html
+https://github.com/jinxo13/HuaweiB525Router
+https://www.mrt-prodz.com/blog/view/2015/05/huawei-modem-api-and-data-plan-monitor
+https://github.com/if0xx/Huawei-Hilink-API
+https://www.lteforum.at/mobilfunk/toolbox-fuer-huawei-router-mit-hilink.1872/seite-5.html
+https://github.com/tpoechtrager/Huawei_Tool
+https://github.com/pearlxcore/HuaweiAPI
+https://github.com/FlashChaser/HuaweiB525Router
+https://github.com/if0xx/Huawei-Hilink-API
+
+TODO:
+realize scram login in bash script
+beautify output
+simplify code, naming
+
+used curl options:
+ -s = silent, -v = verbose, -b = save cookie, -c = send cookie, -H = Header
+
+put the variables below uncommented into file ~/.huawei_simple for convenience
+alternatively just fill in, uncomment and leave in place
+
+user="admin"
+pass="admin"			# factory setting
+ip="192.168.8.1"		# factory setting
+
+COMMENT
+
+[ -f "~/.huawei_simple" ] || . ~/.huawei_simple
+
 scheme="http://"
-baseurl=$scheme$ip
+baseurl="$scheme$ip"
+logdir="/tmp/$(basename $0)"
+smslist="$logdir/smslist"
+logfile="$logdir/loginfo"
+logfilesu="$logdir/loginfosu"
+cookie="$logdir/cookie$$"
 
-. ~/.huawei_simple
+mkdir -p $logdir >/dev/null 2>&1
+rm -f $logdir/cookie* >/dev/null 2>&1
 
-# just a reference, the real xml-strings must remain where they are because
-# variables used are generated there.
+# api (a) call and xml request (r) parameter strings
 
-#login_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Username>$user</Username><Password>$passct</Password><password_type>4</password_type></request>"
-#logout_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Logout>1</Logout></request>"
-#send_sms_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Index>-1</Index><Phones><Phone>$phone</Phone></Phones><Sca></Sca><Content>$message</Content><Length>${#message}</Length><Reserved>1</Reserved><Date>-1</Date></request>"
+type="api"
+rqt="<request>r</request>"
+
+logina="user/login"
+loginr="<Username>u</Username><Password>p</Password><password_type>4</password_type>"
+logouta="user/logout"
+logoutr="<Logout>1</Logout>"
+state_logina="user/state-login"
+
+sms_senda="sms/send-sms"
+sms_sendr="<Index>-1</Index><Phones>p</Phones><Sca></Sca><Content>m</Content><Length>l</Length><Reserved>1</Reserved><Date>-1</Date>"
+sms_counta="sms/sms-count"
+sms_lista="sms/sms-list"
+sms_listr="<PageIndex>1</PageIndex><ReadCount>20</ReadCount><BoxType>i</BoxType><SortType>0</SortType><Ascending>0</Ascending><UnreadPreferred>0</UnreadPreferred>"
+sms_deletea="sms/delete-sms"
+sms_deleter="<Index>i</Index>"
+
+
+led_switcha="led/circle-switch"
+led_switchr="<ledSwitch>1</ledSwitch>"
+
+loginfoa="log/loginfo"
+
+check_notifya="monitoring/check-notifications"
+clear_traffica="monitoring/clear-traffic"
+clear_trafficr="<ClearTraffic>1</ClearTraffic>"
+month_statsa="monitoring/month_statistics"
+Ikey_diaga="monitoring/onekey_diag"
+start_datea="monitoring/start_date"
+start_dater="<StartDay>01</StartDay><DataLimit>999999GB</DataLimit><MonthThreshold>90</MonthThreshold><SetMonthData>1</SetMonthData>"
+mon_stata="monitoring/status"
+traffic_statsa="monitoring/traffic-statistics"
+
+antenna_geta="device/antenna_type"
+antenna_seta="device/antenna_set_type"
+antenna_setr="<antennasettype>1</antennasettype>"
+device_bia="device/basic_information"
+device_infoa="device/information"
+device_modea="device/mode"
+device_moder="<mode>i</mode>"
+device_restarta="device/control"
+device_resetr="<Control>2</Control>"
+device_restartr="<Control>1</Control>"
+device_signala="device/signal"
+
+plmn_lista="net/plmn-list"
+host_lista="wlan/host-list"
+
+pinga="diagnosis/diagnose_ping"
+pingr="<Host>microsoft.com</Host><Timeout>10000</Timeout>"
+tracerta="diagnosis/diagnose_traceroute"
+tracertr="<Host>t-online.de</Host><MaxHopCount>30</MaxHopCount><Timeout>4000</Timeout>"
+
+timeinfoa="sntp/timeinfo"
+timeinfor="<firstserver>time.nist.gov</firstserver><secondserver>ntp.nasa.gov</secondserver><localtimezonename>GMT-01:00</localtimezonename><timezoneidx>39</timezoneidx>"
+
+url_filtera="security/url-filter"
+url_filterr="<urlfilters><urlfilter><status>1</status><ID>2</ID><value>xyzcom</value></urlfilter><urlfilter><status>1</status><ID>3</ID><value>uvwcom</value></urlfilter></urlfilters>"
 
 # encrypt string $1
 
@@ -49,17 +136,23 @@ echo "$1" | sed -n "s/.*<$2>\\([^<]\\+\\)<.*$/\\1/p"
 # send request to router api, if $2 unset get, post otherwise
 
 request(){
+
+[ $DEBUG -eq 1 ] && copt="-v" || copt="-s"
+
 if [ -z "$2" ]; then
-  response=$(curl $copt -b cookie.$$ -c cookie.$$ "$baseurl/$1" | head)
+  [ -z "$1" ] &&  url="$baseurl" || url="$baseurl/$type/$1"
+  response=$(curl $copt -b $cookie -c $cookie "$url")
 else
-  response=$(curl $copt -b cookie.$$ -c cookie.$$ "$baseurl/$1" \
+  rxml=$(echo "$rqt" | sed -e s~">r<"~">$2<"~)
+  response=$(curl $copt -b $cookie -c $cookie "$baseurl/$type/$1" \
   -H "__RequestVerificationToken:$TOKEN2" \
-  --data "$2" | head)
+  -H "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" \
+  -d "$rxml")
 fi
 
 if [ $DEBUG -eq 1 ]; then
   echo -e "\nfrom $baseurl/$1 request: \n$response\n"
-  echo -e "\ncookie: \n$(cat cookie.$$)\n"
+  echo -e "\ncookie: \n$(cat $cookie)\n"
   echo -e "\ntoken: \n$TOKEN2\n"
 fi
 }
@@ -77,30 +170,81 @@ TOKEN2=$(echo $response | cut -d ">" -f 5 | cut -d '"' -f 4)
 login(){
 gettoken
 passct=$(crypt "$user$(crypt "$pass")$TOKEN2")
-login_xml='<?xml version="1.0" encoding="UTF-8"?><request><Username>'$user'</Username><Password>'$passct'</Password><password_type>4</password_type></request>'
-request "api/user/login" "$login_xml"
+xml=$(echo $loginr | sed -e s/">u<"/">$user<"/ -e s/">p<"/">$passct<"/)
+request "$logina" "$xml"
 }
 
 #post send-sms request
 
+numbers(){
+
+  i=1
+  phones=""
+
+  while [ $i -le $# ]
+  do
+    phones=$phones"<Phone>$1</Phone>"
+    shift
+  done
+
+}
+
 send_sms(){
+
+numbers $1
+
+[ $DEBUG -eq 1 ] && echo -e "\n$phones", "$2\n"
+
 gettoken
-send_sms_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Index>-1</Index><Phones><Phone>$phone</Phone></Phones><Sca></Sca><Content>$message</Content><Length>${#message}</Length><Reserved>1</Reserved><Date>1</Date></request>"
-request "api/sms/send-sms" "$send_sms_xml"
+xml=$(echo $sms_sendr | sed -e "s,>p<,>$phones<," -e "s/>m</>$2</" -e "s,>l<,>${#2}<,")
+request "$sms_senda" "$xml"
+
+}
+
+# post sms-list request
+ 
+sms_list(){
+
+rm -f $smslist*
+# iterate thru BoxType 1 to 8 see apilistall.txt for details 
+for i in {1..8..1}; do
+  gettoken
+  xml=$(echo $sms_listr | sed -e s/">i<"/">$i<"/)
+  request "$sms_lista" "$xml"
+  echo -e "$response" >> $smslist
+done
+echo -e "\nCount: $(fromxml "$(cat $smslist)" Count) \
+	 \nNumbers:\n$(fromxml "$(cat $smslist)" Index)\n"
+
+}
+
+# post delete-sms request
+
+sms_delete(){
+gettoken
+if [ -f "$smslist" ]; then
+  index="$(echo $(cat $smslist | grep Index))"
+  echo $index
+else
+  echo -e "\nNothing to delete\n"
+  exit 2
+fi 
+xml=$(echo $sms_deleter | sed -e s,"<Index>i<\/Index>","$index",)
+request "$sms_deletea" "$xml"
+rm -f $smslist
 }
 
 # post logout request (logout need be, as session will else last for 5 minutes)
 
 logout(){
 gettoken
-logout_xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><request><Logout>1</Logout></request>"
-request "api/user/logout" "$logout_xml"
+request "$logouta" "$logoutr"
 }
 
 # get login-state (not really necessary, checks if  user is logged out for good)
 
 state_login(){
-request "api/user/state-login"
+request "$state_logina"
 if [ -z "$(fromxml "$response" username)" ]; then
   echo -e "\ntask completed, no user logged in\n"
 else
@@ -108,22 +252,224 @@ else
 fi
 }
 
-login
-send_sms
-logout
-state_login
+# get loginfo request
 
+loginfo(){
+gettoken
+request "$loginfoa"
+echo -e "$(fromxml "$response" LogContent)" >> $logfile
+sort -u $logfile > $logfilesu
+rm $logfile
+mv $logfilesu $logfile
+#cat $logfile | more
+tail $logfile
+}
 
+clear_traffic(){
+gettoken
+request "$clear_traffica" "$clear_trafficr"
+echo -e "$response"
+}
 
+usage(){
 
+cat<<EOF
+Usage: $0 <command> [<options(xml)>]
 
+c(hec)k_not(ifications)
+dev(ice)_inf(ormation)
+dev(ice)_sig(nal)
+dev(ice)_b(asic_)i(nformation)
+dev(ice)_restart 
+dev(ice)_reset (to factory settings)
+mon(itoring)_stat(us)
+1key_diag(nosis)
+h(o)st_l(i)st (devices connected to wlan)
+loginfo (display last 10, to see all: cat loginfo | more)
+plmn_l(i)st (available mobile networks, may take 60s)			
+r(e)q(ues)t <...> [<xml-string>]
+sms_c(ou)nt
+sms_del(ete) ["<Index>sms_id 1</Index>" [<Index>sms_id n</Index>]]
+sms_l(i)st ["<page_size>" "<page_no>" "<box_type>"] in=1,sent=2,draft=3,trash=4
+sms_s(e)nd "<phone> [<phone>..<phone>]" "<message>"
+stat(istics)_mon(th)
+stat(istics)_tr(a)f(fic)
+cl(ea)r_tr(a)f(fic_statistics)
 
+EOF
+}
 
+# main
 
+clear
+rm -f cookie.* 
 
+[ "$1" == "d" ] && { DEBUG=1; shift; } || DEBUG=0
 
-
-
-
-
-
+case $1 in
+    rqt)
+	shift	
+	login
+        gettoken
+	request $1 $2
+        echo "$response"
+        logout
+	;;
+    sms_snd)
+        login
+        send_sms "$2" "$(date +%Y%m%d%H%M) $3"
+        logout
+        ;;
+    sms_lst)
+        login
+	sms_list
+        logout
+	;;
+    sms_del)
+        login
+        sms_delete $1
+        logout
+	;;
+    sms_cnt)
+        login
+        request "$sms_counta"
+        echo -e "$response" | more
+	logout
+	;;
+     loginfo)
+	login
+	loginfo
+	logout
+	;;
+     led_switch)
+	login
+	gettoken
+	request "$led_switcha" "$led_switchr"
+	echo -e "$response"
+	logout
+	;;
+     dev_inf)
+	login
+	request "$device_infoa"
+	echo -e "$response" | more
+ 	logout
+	;;
+     dev_sig)
+	login
+	request "$device_signala"
+	echo -e "$response" | more
+	logout
+	;;
+     dev_bi)
+	login
+	request "$device_bia"
+	echo -e "$response" | more
+     	logout
+	;;
+     dev_restart)
+	login
+	gettoken
+	request "$device_restarta" "$device_restartr"
+	logout
+	;;
+     dev_reset)
+	login
+	gettoken
+	request "$device_restarta" "$device_resetr"
+	logout
+	;;
+     mon_stat)
+	login
+	gettoken
+	request "$mon_stata"
+	echo -e "$response" | more
+	logout
+	;;
+     plmn_lst)
+	login
+	echo -e "Please wait ...\n"
+	request "$plmn_lista"
+	echo -e "$response" | more
+	logout
+	;;
+     hst_lst)
+	login
+	request "$host_lista"
+	echo -e "$response" | more
+	logout
+	;;
+     stat_trf)
+	login
+	request "$traffic_statsa"
+	echo -e "$response" | more
+	logout
+	;;
+     stat_mon)
+	login
+	request "$month_statsa"
+	echo -e "$response" | more
+	logout
+	;;
+     ck_not)
+	login
+	request "$check_notifya"
+#	echo -e "$response" | more
+	echo -e $(fromxml "$response" "UnreadMessage")" " \
+                $(fromxml "$response" "SmsStorageFull")" " \
+		$(fromxml "$response" "OnlineUpdateStatus")" " \
+		$(fromxml "$response" "SimOperEvent")" \n"
+	logout
+	;;
+     clr_trf)
+	login
+	clear_traffic
+	echo -e "$response" | more
+	logout
+	;;
+     diag_ping)
+	login
+	gettoken
+	request "$pinga" "$pingr"
+	echo "$response"
+	sleep 5
+	gettoken
+	request "$pinga"
+	echo "$response"
+	logout
+	;;
+     diag_tracert)
+	login
+	gettoken
+	request "$tracerta" "$tracertr"
+	echo "$response"
+	sleep 30
+	gettoken
+	request "$tracerta"
+	echo "$response"
+	logout
+	;;
+     1key_diag)
+	login
+	gettoken
+	request "$Ikey_diaga"
+	echo "$response"
+	logout
+	;;
+     timeinfo)
+	login
+	gettoken
+	request "$timeinfoa" "$timeinfor"
+	echo "$response"
+	sleep 5
+	gettoken
+	request "$timeinfoa"
+	echo "$response"
+	logout
+	;;
+     quit)
+	exit
+	;;
+    *)
+        usage
+        ;;
+esac
